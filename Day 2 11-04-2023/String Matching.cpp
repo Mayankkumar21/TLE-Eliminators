@@ -73,7 +73,7 @@ long long compute_hash(string const& s) {
     }
     return hash_value;
 }
-long long compute_susbtring_hash(int i,int j,string const& s,vector<long long>&prefix){
+long long compute_substring_hash(int i,int j,string const& s,vector<long long>&prefix){
     const int p = 31;
     const int m = 1e9 + 9;
     long long hash_j=prefix[j];
@@ -110,7 +110,7 @@ prefix[i]=(prefix[i-1]+(powers[i])*(s[i]-'a'+1))%m;
 int n=t.size(); //window size
 int i=0,j=n-1,cnt=0;
 while(j<s.size()) {
-    if (compute_susbtring_hash(i, j, s, prefix) == pattern_hash)cnt++;
+    if (compute_substring_hash(i, j, s, prefix) == pattern_hash)cnt++;
     i++;
     j++;
         }
