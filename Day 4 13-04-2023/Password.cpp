@@ -1,6 +1,6 @@
 // https://codeforces.com/problemset/problem/126/B
 
-#include <bits/stdc++.h>
+    #include <bits/stdc++.h>
 using namespace std;
 #define rep(i, a, b) for(int i = a; i < (b); ++i)
 #define all(x) begin(x), end(x)
@@ -72,7 +72,6 @@ long long bin_power(long long a, long long b) {
     return res;
 }
 long long compute_hash(string const& s,long long p,long long m) {
-    // p-> base m->modulo val
     long long hash_value = 0;
     long long p_pow = 1;
     for (char c : s) {
@@ -91,7 +90,6 @@ long long compute_substring_hash(int i,int j,string const& s,vector<long long>&p
     if(i>0)hash_i=prefix[i-1];
     else return hash_j;
 
-//    long long power=bin_power_mod(p,i,m);
 
     long long val=hash_j-hash_i+m;
 //    long long invpower=bin_power_mod(power,m-2,m);   //mod inverse basically (1/x)%mod = pow(x,mod-2)%mod
@@ -123,10 +121,10 @@ void solve(){
 
     ll p=31;
     ll m=1e9+9;
-    vector<ll>prefix(n),suffix(n),powers(n);
+    vector<ll>prefix(n),suffix(n),powers(n+1);
 
     powers[0]=1;
-    for(int i=1;i<n;i++)powers[i]=(powers[i-1]*31)%m;
+    for(int i=1;i<=n;i++)powers[i]=(powers[i-1]*31)%m;
 
     prefix[0]=s[0]-'a'+1;
     suffix[0]=s[n-1]-'a'+1;
@@ -138,22 +136,18 @@ void solve(){
     for(int i=1;i<n;i++){
         suffix[i]=(suffix[i-1]*31+(s[n-i-1]-'a'+1)%m)%m;
     }
-//    for(auto i:prefix)cout<<i<<" ";
-//    cout<<endl;
-//    for(auto i:suffix)cout<<i<<" ";
 
-    vector<ll>inv_power(n);
-    for(int i=0;i<n;i++){
-        long long power=bin_power_mod(p,i,m);
-        inv_power[i]= bin_power_mod(power,m-2,m);
+
+    vector<ll>inv_power(n+1);
+    inv_power[n]=bin_power_mod(powers[n],m-2,m);
+    for(int i=n-1;i>=0;i--){
+        inv_power[i]= (inv_power[i+1]*p)%m;
     }
 
     ll l=1,h=n-1;
     ll res=-1;
     while(l<=h){
         ll mid=l+(h-l)/2;
-//        cout<<l<<" "<< h<< endl;
-//        cout<<"length"<<" "<<mid<<endl;
         if(valid(mid,prefix,suffix,s,inv_power)) {
             l = mid + 1;
             res = mid;
@@ -161,14 +155,10 @@ void solve(){
         else
             h=mid-1;
     }
-//    ll sub_hash= compute_substring_hash(6,8,s,prefix);
-//    cout<<sub_hash;
     int ans=-1;
-//    cout<<res<<" ";
     for(int i=res;i>0;i--){
         ll required_hash=prefix[i-1];
         ll curr_hash= suffix[i-1];
-//        cout<<required_hash<<" "<<curr_hash<<endl;
         if(required_hash==curr_hash){
             ans=i;
             break;
@@ -177,9 +167,7 @@ void solve(){
     }
     if(ans==-1)cout<<"Just a legend";
     else cout<<s.substr(0,ans);
-
 }
-
 
 int main() {
     ios_base::sync_with_stdio(false);
@@ -190,16 +178,16 @@ int main() {
     freopen("Output.txt","w",stdout);
     freopen("Error.txt","w",stderr);
 #endif
-    auto start1=chrono::high_resolution_clock::now();
+//     auto start1=chrono::high_resolution_clock::now();
     int t=1;
 //    cin>>t;
     while(t--) {
         solve();
     }
-    auto stop1=chrono::high_resolution_clock::now();
-    auto duration= chrono::duration_cast<chrono::microseconds>(stop1-start1);
-#ifndef ONLINE_JUDGE
-    cerr<<"Time: "<<duration.count()/1000<<endl;
-#endif
-    return 0;
+//     auto stop1=chrono::high_resolution_clock::now();
+//     auto duration= chrono::duration_cast<chrono::microseconds>(stop1-start1);
+// #ifndef ONLINE_JUDGE
+//     cerr<<"Time: "<<duration.count()/1000<<endl;
+// #endif
+     return 0;
 }
