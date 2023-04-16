@@ -93,7 +93,7 @@ long long compute_substring_hash(int i,int j,string const& s,vector<long long>&p
 
     long long val=hash_j-hash_i+m;
 //    long long invpower=bin_power_mod(power,m-2,m);   //mod inverse basically (1/x)%mod = pow(x,mod-2)%mod
-    ll invpower=inv_power[i];
+    ll invpower=inv_power[i];                           // (a/b)%m === a*(power(b,mod-2))%m;
     val%=m;
     val*=invpower;
     return val%m;
